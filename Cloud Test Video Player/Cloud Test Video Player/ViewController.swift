@@ -33,14 +33,16 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
         DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async {
             self.runTest(candidates: self.testCandites, iterations: 100)
-            self.videoView.player!.pause()
+            DispatchQueue.main.async {
+                self.videoView.player!.pause()
+            }
         }
     }
     
     func runTest(candidates: [ServiceModel], iterations: Int) {
         var results = prepareForTests(candidates: candidates, iterations: iterations)
         for iteration in 0..<iterations {
-            print("Iteration \(iteration+1)/\(iteration)")
+            print("Iteration \(iteration+1)/\(iterations)")
             candidates.forEach { model in
                 let result = testModel(model)
                 results[model.serviceName]![iteration] = result
